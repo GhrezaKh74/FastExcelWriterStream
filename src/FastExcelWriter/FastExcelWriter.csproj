@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <!-- ═══ NuGet Package Metadata ═══ -->
+    <PackageId>FastExcelWriter</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>GholamReza Khalaji</Authors>
+    <Company>Bsi</Company>
+    <Copyright>Copyright © 2026 YourName</Copyright>
+
+    <Title>FastExcelWriter — Fast Streaming Excel Writer for .NET 8</Title>
+    <Description>
+      Lightweight, extremely fast and memory efficient Excel (.xlsx) writer for .NET 8.
+      Streams data directly to file with no memory footprint.
+      Supports multiple sheets, auto sheet split, styles, freeze panes,
+      RTL, auto column width, merge cells, formulas, and number formats.
+    </Description>
+
+    <PackageTags>excel;xlsx;fast;streaming;memory-efficient;dotnet;csharp;report;export</PackageTags>
+    <PackageProjectUrl>https://github.com/YourName/FastExcelWriter</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/YourName/FastExcelWriter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>
+      v1.0.0 — Initial release.
+      - Streaming xlsx writer
+      - Multiple sheets (up to 10)
+      - Auto sheet split for 1M+ rows
+      - Cell styles with number formatting
+      - Auto column width
+      - RTL support
+      - Freeze panes, AutoFilter, Merge cells
+    </PackageReleaseNotes>
+
+    <!-- ═══ Build Settings ═══ -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <!-- ═══ NuGet Files ═══ -->
+  <ItemGroup>
+    <None Include="..\..\README.md"   Pack="true" PackagePath="\"/>
+    <None Include="..\..\LICENSE"     Pack="true" PackagePath="\"/>
+    <None Include="..\..\CHANGELOG.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <!-- ═══ Dependencies ═══ -->
+  <ItemGroup>
+    <PackageReference Include="SharpCompress" Version="0.47.3"/>
+  </ItemGroup>
+
+</Project>
