@@ -40,7 +40,7 @@ Streams data **directly to file** — no XML serialization, no memory footprint.
 ## 📦 Installation
 
 ```bash
-dotnet add package FastExcelWriter
+dotnet add package FastExcelWriterStream
 ```
 
 ---
