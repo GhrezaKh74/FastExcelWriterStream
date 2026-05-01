@@ -1,7 +1,7 @@
-# FastExcelWriter
+# FastExcelWriterStream
 
-[![NuGet](https://img.shields.io/nuget/v/FastExcelWriter.svg)](https://www.nuget.org/packages/FastExcelWriter)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/FastExcelWriter.svg)](https://www.nuget.org/packages/FastExcelWriter)
+[![NuGet](https://img.shields.io/nuget/v/FastExcelWriterStream.svg)](https://www.nuget.org/packages/FastExcelWriterStream)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/FastExcelWriterStream.svg)](https://www.nuget.org/packages/FastExcelWriterStream)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com)
 
@@ -31,7 +31,7 @@ Streams data **directly to file** — no XML serialization, no memory footprint.
 
 | Library | Time | RAM | Rows × Cols |
 |---|---|---|---|
-| **FastExcelWriter** | ~7s | ~8 MB | 1M × 50 |
+| **FastExcelWriterStream** | ~7s | ~8 MB | 1M × 50 |
 | EPPlus | ~44s | ~2,900 MB | 1M × 50 |
 | ClosedXML | ~60s+ | ~3,500 MB | 1M × 50 |
 
@@ -48,7 +48,7 @@ dotnet add package FastExcelWriterStream
 ## 🚀 Quick Start
 
 ```csharp
-using FastExcelWriter;
+using FastExcelWriterStream;
 
 using var ew = new ExcelWriter("output.xlsx");
 

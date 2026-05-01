@@ -1,6 +1,6 @@
 using DotNetCompressionLevel = System.IO.Compression.CompressionLevel;
 
-namespace FastExcelWriter;
+namespace FastExcelWriterStream;
 
 /// <summary>Sheet configuration</summary>
 public sealed class SheetConfig

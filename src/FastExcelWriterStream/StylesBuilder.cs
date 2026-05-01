@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace FastExcelWriter;
+namespace FastExcelWriterStream;
 
 internal static class StylesBuilder
 {

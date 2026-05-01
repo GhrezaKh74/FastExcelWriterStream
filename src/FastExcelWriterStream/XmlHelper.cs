@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Text;
 
-namespace FastExcelWriter;
+namespace FastExcelWriterStream;
 
 internal static class XmlHelper
 {

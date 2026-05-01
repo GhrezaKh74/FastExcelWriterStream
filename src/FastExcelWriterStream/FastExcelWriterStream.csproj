@@ -8,12 +8,12 @@
 
     <!-- ═══ NuGet Package Metadata ═══ -->
     <PackageId>FastExcelWriterStream</PackageId>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <Authors>GholamReza Khalaji</Authors>
     <Company>Bsi</Company>
     <Copyright>Copyright © 2026 YourName</Copyright>
 
-    <Title>FastExcelWriter — Fast Streaming Excel Writer for .NET 8</Title>
+    <Title>FastExcelWriterStream — Fast Streaming Excel Writer for .NET 8</Title>
     <Description>
       Lightweight, extremely fast and memory efficient Excel (.xlsx) writer for .NET 8.
       Streams data directly to file with no memory footprint.
@@ -22,8 +22,8 @@
     </Description>
 
     <PackageTags>excel;xlsx;fast;streaming;memory-efficient;dotnet;csharp;report;export</PackageTags>
-    <PackageProjectUrl>https://github.com/YourName/FastExcelWriter</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/YourName/FastExcelWriter</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/YourName/FastExcelWriterStream</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/YourName/FastExcelWriterStream</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -48,14 +48,14 @@
 
   <!-- ═══ NuGet Files ═══ -->
   <ItemGroup>
-    <None Include="..\..\README.md"   Pack="true" PackagePath="\"/>
-    <None Include="..\..\LICENSE"     Pack="true" PackagePath="\"/>
-    <None Include="..\..\CHANGELOG.md" Pack="true" PackagePath="\"/>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+    <None Include="..\..\CHANGELOG.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <!-- ═══ Dependencies ═══ -->
   <ItemGroup>
-    <PackageReference Include="SharpCompress" Version="0.47.3"/>
+    <PackageReference Include="SharpCompress" Version="0.47.3" />
   </ItemGroup>
 
 </Project>

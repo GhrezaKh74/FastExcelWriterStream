@@ -1,13 +1,13 @@
 using System.IO.Compression;
-using FastExcelWriter;
+using FastExcelWriterStream;
 using Xunit;
 
-namespace FastExcelWriter.Tests;
+namespace FastExcelWriterStream.Tests;
 
 public class ExcelWriterTests
 {
     private static string TempFile() =>
-        Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid()}.xlsx");
+        Path.Combine("", $"test_{Guid.NewGuid()}.xlsx");
 
     [Fact]
     public void Write_CreatesValidXlsxFile()

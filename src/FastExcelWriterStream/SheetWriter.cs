@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace FastExcelWriter;
+namespace FastExcelWriterStream;
 
 internal sealed class SheetWriter : IDisposable
 {

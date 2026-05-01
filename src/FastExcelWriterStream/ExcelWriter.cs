@@ -7,7 +7,7 @@ using DotNetCompressionLevel = System.IO.Compression.CompressionLevel;
 using DotNetZipArchive       = System.IO.Compression.ZipArchive;
 using DotNetZipArchiveMode   = System.IO.Compression.ZipArchiveMode;
 
-namespace FastExcelWriter;
+namespace FastExcelWriterStream;
 
 public sealed class ExcelWriter : IDisposable
 {

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FastExcelWriter\FastExcelWriter.csproj" />
+    <ProjectReference Include="..\..\src\FastExcelWriterStream\FastExcelWriterStream.csproj" />
   </ItemGroup>
 
 </Project>

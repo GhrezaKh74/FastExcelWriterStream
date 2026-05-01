@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to FastExcelWriter will be documented in this file.
+All notable changes to FastExcelWriterStream will be documented in this file.
 
 ## [1.0.0] - 2026-04-30
 
