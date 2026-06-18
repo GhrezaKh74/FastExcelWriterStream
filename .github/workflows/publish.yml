@@ -19,16 +19,16 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore src/FastExcelWriter/FastExcelWriter.csproj
+        run: dotnet restore FastExcelWriterStream.sln
 
       - name: Build
-        run: dotnet build src/FastExcelWriter/FastExcelWriter.csproj -c Release --no-restore
+        run: dotnet build FastExcelWriterStream.sln -c Release --no-restore
 
       - name: Test
-        run: dotnet test tests/FastExcelWriter.Tests/FastExcelWriter.Tests.csproj -c Release --no-build
+        run: dotnet test tests/FastExcelWriterStream.Tests/FastExcelWriterStream.Tests.csproj -c Release --no-build
 
       - name: Pack
-        run: dotnet pack src/FastExcelWriter/FastExcelWriter.csproj -c Release --no-build -o ./nupkg
+        run: dotnet pack src/FastExcelWriterStream/FastExcelWriterStream.csproj -c Release --no-build -o ./nupkg
 
       - name: Push to NuGet
         run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
