@@ -11,7 +11,7 @@
     <Version>2.1.0</Version>
     <Authors>GholamReza Khalaji</Authors>
     <Company>Bsi</Company>
-    <Copyright>Copyright © 2026 YourName</Copyright>
+    <Copyright>Copyright © 2026 GholamReza Khalaji</Copyright>
 
     <Title>FastExcelWriterStream — Fast Streaming Excel Writer for .NET 10</Title>
     <Description>
@@ -22,8 +22,8 @@
     </Description>
 
     <PackageTags>excel;xlsx;fast;streaming;memory-efficient;dotnet;csharp;report;export</PackageTags>
-    <PackageProjectUrl>https://github.com/YourName/FastExcelWriterStream</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/YourName/FastExcelWriterStream</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/GhrezaKh74/FastExcelWriterStream</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GhrezaKh74/FastExcelWriterStream</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
