@@ -8,7 +8,7 @@
 
     <!-- ═══ NuGet Package Metadata ═══ -->
     <PackageId>FastExcelWriterStream</PackageId>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <Authors>GholamReza Khalaji</Authors>
     <Company>Bsi</Company>
     <Copyright>Copyright © 2026 GholamReza Khalaji</Copyright>
@@ -28,10 +28,12 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-      v2.1.0 — Upgraded target framework to .NET 10.
-      - Now targets net10.0 (latest LTS)
-      - Updated test tooling (Microsoft.NET.Test.Sdk, xUnit)
-      - CI pipeline updated to .NET 10 SDK
+      v2.2.0 — New high-level API and data types.
+      - WriteDate / WriteBool for date and boolean cells
+      - WriteRow(...) with automatic type detection
+      - WriteRecords&lt;T&gt; object export with [ExcelColumn] / [ExcelIgnore]
+      - Raised column (16384) and sheet (1000) limits
+      - Updated SharpCompress to 0.49.1 (security fix)
     </PackageReleaseNotes>
 
     <!-- ═══ Build Settings ═══ -->
@@ -51,7 +53,7 @@
 
   <!-- ═══ Dependencies ═══ -->
   <ItemGroup>
-    <PackageReference Include="SharpCompress" Version="0.47.3" />
+    <PackageReference Include="SharpCompress" Version="0.49.1" />
   </ItemGroup>
 
 </Project>

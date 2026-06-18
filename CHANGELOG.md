@@ -2,6 +2,26 @@
 
 All notable changes to FastExcelWriterStream will be documented in this file.
 
+## [2.2.0] - 2026-06-18
+
+### Added
+- `WriteDate(DateTime, ...)` — dates stored as Excel serial numbers with a built-in date format
+- `WriteBool(bool, ...)` — native boolean cells, plus `DataType.Boolean`
+- Built-in date/time number formats: `NumberFormat.Date`, `NumberFormat.Time`, `NumberFormat.DateTime`
+- High-level `WriteRow(...)` / `WriteRowValues(...)` with automatic type detection
+  (string, number, `DateTime`/`DateOnly`/`TimeOnly`, bool); `null` leaves a cell empty
+- `WriteRecords<T>(...)` to export an `IEnumerable<T>` as a table, with
+  `[ExcelColumn]` (name/order/format) and `[ExcelIgnore]` attributes
+- `CurrentRow` property exposing the next high-level row
+
+### Changed
+- Raised `MaxCols` to 16384 and `MaxSheets` to 1000
+- Updated `SharpCompress` 0.47.3 → 0.49.1 (resolves GHSA-6c8g-7p36-r338)
+
+### Fixed
+- Styles builder no longer emits an empty `<numFmts>` block when only
+  built-in formats (date/time) are used
+
 ## [2.1.0] - 2026-06-18
 
 ### Changed

@@ -80,6 +80,12 @@ public enum NumberFormat
 {
     /// <summary>بدون فرمت خاص (پیش‌فرض)</summary>
     None             = 0,
+    /// <summary>تاریخ کوتاه (built-in اکسل): mm-dd-yy</summary>
+    Date             = 14,
+    /// <summary>زمان (built-in اکسل): h:mm:ss</summary>
+    Time             = 21,
+    /// <summary>تاریخ و زمان (built-in اکسل): mm-dd-yy h:mm</summary>
+    DateTime         = 22,
     /// <summary>عدد صحیح با جداکننده سه‌رقم: 1,234,567</summary>
     Thousands        = 164,
     /// <summary>عدد اعشاری با جداکننده سه‌رقم: 1,234,567.00</summary>
@@ -91,7 +97,33 @@ public enum NumberFormat
 }
 
 /// <summary>Cell data type</summary>
-public enum DataType { Text, Number, Formula }
+public enum DataType { Text, Number, Formula, Boolean }
+
+/// <summary>
+/// نگاشت یک property به ستون اکسل برای WriteRecords.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+public sealed class ExcelColumnAttribute : Attribute
+{
+    /// <summary>عنوان ستون (هدر). اگه خالی باشه از نام property استفاده میشه.</summary>
+    public string? Name { get; set; }
+
+    /// <summary>ترتیب ستون. ستون‌های با Order کمتر اول میان. پیش‌فرض = ترتیب تعریف.</summary>
+    public int Order { get; set; } = int.MaxValue;
+
+    /// <summary>فرمت عددی این ستون.</summary>
+    public NumberFormat Format { get; set; } = NumberFormat.None;
+
+    /// <summary>تعداد رقم اعشار این ستون.</summary>
+    public int DecimalPlaces { get; set; } = 0;
+
+    public ExcelColumnAttribute() { }
+    public ExcelColumnAttribute(string name) { Name = name; }
+}
+
+/// <summary>property علامت‌گذاری‌شده در خروجی WriteRecords نادیده گرفته میشه.</summary>
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+public sealed class ExcelIgnoreAttribute : Attribute { }
 
 /// <summary>Built-in formula types</summary>
 public enum FormulaType { Average, Count, Max, Min, Sum }

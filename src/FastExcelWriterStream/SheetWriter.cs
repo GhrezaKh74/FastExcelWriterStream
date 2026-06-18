@@ -76,6 +76,24 @@ internal sealed class SheetWriter : IDisposable
     internal void WriteNumber(double value, int col, int row, int styleIndex = -1)
         => WriteNumberDirect(value, col, row, styleIndex);
 
+    internal void WriteBool(bool value, int col, int row, int styleIndex = -1)
+    {
+        EnsureRow(row);
+        var colName   = GetColName(col);
+        var styleAttr = styleIndex >= 0
+            ? (styleIndex > 0 ? $" s=\"{styleIndex}\"" : "")
+            : _styleAttr;
+        var w = _dataWriter ?? _writer;
+        w.Write("<c r=\"");
+        w.Write(colName);
+        w.Write(row);
+        w.Write("\" t=\"b\"");
+        w.Write(styleAttr);
+        w.Write("><v>");
+        w.Write(value ? '1' : '0');
+        w.Write("</v></c>");
+    }
+
     internal void WriteFormula(string formula, int col, int row)
         => Write(formula, col, row, DataType.Formula);
 
@@ -213,6 +231,18 @@ internal sealed class SheetWriter : IDisposable
                 w.Write("><f>");
                 w.Write(NeedsEscape(value) ? XmlHelper.EscapeXml(value) : value);
                 w.Write("</f></c>");
+                break;
+
+            case DataType.Boolean:
+                w.Write("<c r=\"");
+                w.Write(colName);
+                w.Write(row);
+                w.Write("\" t=\"b\"");
+                w.Write(styleAttr);
+                w.Write("><v>");
+                // قبول می‌کنیم: "1"/"0"/"true"/"false"
+                w.Write(value == "1" || value.Equals("true", StringComparison.OrdinalIgnoreCase) ? '1' : '0');
+                w.Write("</v></c>");
                 break;
 
             default:

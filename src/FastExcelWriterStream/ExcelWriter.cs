@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Reflection;
 using System.Text;
 using SharpCompress.Common;
 using SharpCompress.Writers.Zip;
@@ -12,9 +14,9 @@ namespace FastExcelWriterStream;
 public sealed class ExcelWriter : IDisposable
 {
     // ── ثابت‌ها ──────────────────────────────────────────────────────
-    public const int MaxSheets = 10;
+    public const int MaxSheets = 1000;
     public const int MaxRows   = 1_048_576;
-    public const int MaxCols   = 50;
+    public const int MaxCols   = 16_384;
 
     // ── فیلدها ──────────────────────────────────────────────────────
     private readonly Stream             _outputStream;
@@ -113,6 +115,31 @@ public sealed class ExcelWriter : IDisposable
         {
             ValidateRow(row);
             GetWriter(1).WriteNumber(value, col, row, styleIndex);
+        }
+    }
+
+    /// <summary>
+    /// نوشتن تاریخ. تاریخ به‌صورت عدد سریال اکسل ذخیره میشه و با فرمت تاریخ نمایش داده میشه.
+    /// اگه styleIndex ندی، یه style تاریخ خودکار ساخته و استفاده میشه.
+    /// </summary>
+    public void WriteDate(DateTime value, int col, int row, int styleIndex = -1)
+        => WriteNumber(value.ToOADate(), col, row,
+            styleIndex: styleIndex >= 0 ? styleIndex : EnsureBuiltinStyle(NumberFormat.Date));
+
+    /// <summary>نوشتن مقدار boolean (TRUE/FALSE).</summary>
+    public void WriteBool(bool value, int col, int row, int styleIndex = -1)
+    {
+        ValidateCol(col);
+
+        if (_autoSheetSplitEnabled)
+        {
+            var (sheetIdx, mappedRow) = ResolveAutoSheetSplit(row);
+            GetWriter(sheetIdx).WriteBool(value, col, mappedRow, styleIndex);
+        }
+        else
+        {
+            ValidateRow(row);
+            GetWriter(1).WriteBool(value, col, row, styleIndex);
         }
     }
 
@@ -366,6 +393,167 @@ public sealed class ExcelWriter : IDisposable
             ? rowInSheet + 1
             : rowInSheet;
         return (_autoSheetSplitCurrent, mappedRow);
+    }
+
+    // ── High-Level Row / Records API ────────────────────────────────
+    //
+    // این API ردیف رو خودکار جلو می‌بره و نوعِ هر مقدار رو خودش تشخیص میده
+    // (متن، عدد، تاریخ، boolean). همیشه روی شیت ۱ می‌نویسه و نباید با
+    // Write(col, row) دستی قاطی بشه.
+
+    private int _hlRow = 1;                       // ردیف بعدی برای WriteRow/WriteRecords
+    private int _headerStyleIndex = -1;           // style هدر (bold) — لیزی
+    private readonly Dictionary<NumberFormat, int> _builtinStyleCache = new();
+
+    /// <summary>ردیف بعدی که WriteRow/WriteRecords می‌نویسه (1-based).</summary>
+    public int CurrentRow => _hlRow;
+
+    /// <summary>
+    /// نوشتن یک ردیف کامل. نوع هر مقدار خودکار تشخیص داده میشه:
+    /// string→متن، DateTime/DateOnly→تاریخ، TimeOnly→زمان، bool→boolean،
+    /// انواع عددی→عدد، بقیه→ToString(). مقدار null یعنی سلول خالی.
+    /// مقدار ردیفِ نوشته‌شده رو برمی‌گردونه.
+    /// </summary>
+    public int WriteRow(params object?[] values)
+        => WriteRowValues(values);
+
+    /// <summary>نسخه‌ی IEnumerable از WriteRow.</summary>
+    public int WriteRowValues(IEnumerable<object?> values)
+    {
+        ArgumentNullException.ThrowIfNull(values);
+        int row = _hlRow;
+        int col = 1;
+        foreach (var v in values)
+            WriteAutoCell(v, col++, row, -1);
+        _hlRow = row + 1;
+        return row;
+    }
+
+    /// <summary>
+    /// نوشتن مجموعه‌ای از آبجکت‌ها به‌صورت جدول.
+    /// ستون‌ها از public property‌ها ساخته میشن. با [ExcelColumn] می‌تونی
+    /// عنوان/ترتیب/فرمت بدی و با [ExcelIgnore] یه property رو حذف کنی.
+    /// تعداد ردیف داده‌ی نوشته‌شده رو برمی‌گردونه.
+    /// </summary>
+    public int WriteRecords<T>(IEnumerable<T> records, bool writeHeader = true, int headerStyleIndex = -1)
+    {
+        ArgumentNullException.ThrowIfNull(records);
+
+        var cols = typeof(T)
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Where(p => p.CanRead
+                && p.GetIndexParameters().Length == 0
+                && p.GetCustomAttribute<ExcelIgnoreAttribute>() is null)
+            .Select(p => new { Prop = p, Attr = p.GetCustomAttribute<ExcelColumnAttribute>() })
+            .OrderBy(x => x.Attr?.Order ?? int.MaxValue)
+            .ToList();
+
+        if (cols.Count == 0)
+            throw new InvalidOperationException($"نوع {typeof(T).Name} هیچ ستون قابل‌نوشتنی ندارد.");
+
+        // style هر ستون (اگه فرمت تعریف شده باشه)
+        var colStyle = new int[cols.Count];
+        for (int i = 0; i < cols.Count; i++)
+        {
+            var a = cols[i].Attr;
+            colStyle[i] = (a != null && (a.Format != NumberFormat.None || a.DecimalPlaces > 0))
+                ? AddStyle(new StyleConfig { NumberFormat = a.Format, DecimalPlaces = a.DecimalPlaces })
+                : -1;
+        }
+
+        int row = _hlRow;
+
+        if (writeHeader)
+        {
+            int hs = headerStyleIndex >= 0 ? headerStyleIndex : EnsureHeaderStyle();
+            for (int i = 0; i < cols.Count; i++)
+                Write(cols[i].Attr?.Name ?? cols[i].Prop.Name, i + 1, row, DataType.Text, hs);
+            row++;
+        }
+
+        int count = 0;
+        foreach (var rec in records)
+        {
+            for (int i = 0; i < cols.Count; i++)
+            {
+                var value = rec is null ? null : cols[i].Prop.GetValue(rec);
+                WriteAutoCell(value, i + 1, row, colStyle[i]);
+            }
+            row++;
+            count++;
+        }
+
+        _hlRow = row;
+        return count;
+    }
+
+    /// <summary>نوشتن یک مقدار با تشخیص خودکار نوع، روی شیت ۱.</summary>
+    private void WriteAutoCell(object? value, int col, int row, int styleIndex)
+    {
+        switch (value)
+        {
+            case null:
+                return;
+            case string s:
+                Write(s, col, row, DataType.Text, styleIndex);
+                return;
+            case bool b:
+                WriteBool(b, col, row, styleIndex);
+                return;
+            case DateTime dt:
+            {
+                var fmt = dt.TimeOfDay == TimeSpan.Zero ? NumberFormat.Date : NumberFormat.DateTime;
+                WriteDate(dt, col, row, styleIndex >= 0 ? styleIndex : EnsureBuiltinStyle(fmt));
+                return;
+            }
+            case DateOnly d:
+                WriteDate(d.ToDateTime(TimeOnly.MinValue), col, row,
+                    styleIndex >= 0 ? styleIndex : EnsureBuiltinStyle(NumberFormat.Date));
+                return;
+            case TimeOnly t:
+                WriteNumber(t.ToTimeSpan().TotalDays, col, row,
+                    styleIndex: styleIndex >= 0 ? styleIndex : EnsureBuiltinStyle(NumberFormat.Time));
+                return;
+        }
+
+        if (IsNumeric(value))
+            WriteNumber(Convert.ToDouble(value, CultureInfo.InvariantCulture), col, row, styleIndex: styleIndex);
+        else
+            Write(value.ToString() ?? "", col, row, DataType.Text, styleIndex);
+    }
+
+    private static bool IsNumeric(object value)
+    {
+        switch (Type.GetTypeCode(value.GetType()))
+        {
+            case TypeCode.Byte:  case TypeCode.SByte:
+            case TypeCode.Int16: case TypeCode.UInt16:
+            case TypeCode.Int32: case TypeCode.UInt32:
+            case TypeCode.Int64: case TypeCode.UInt64:
+            case TypeCode.Single: case TypeCode.Double:
+            case TypeCode.Decimal:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>style آماده برای فرمت‌های built-in (تاریخ/زمان) — یک‌بار ساخته و کش میشه.</summary>
+    private int EnsureBuiltinStyle(NumberFormat fmt)
+    {
+        if (!_builtinStyleCache.TryGetValue(fmt, out var idx))
+        {
+            idx = AddStyle(new StyleConfig { NumberFormat = fmt });
+            _builtinStyleCache[fmt] = idx;
+        }
+        return idx;
+    }
+
+    private int EnsureHeaderStyle()
+    {
+        if (_headerStyleIndex < 0)
+            _headerStyleIndex = AddStyle(new StyleConfig { Bold = true });
+        return _headerStyleIndex;
     }
 
     // ── Dispose ─────────────────────────────────────────────────────
