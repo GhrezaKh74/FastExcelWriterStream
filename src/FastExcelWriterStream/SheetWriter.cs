@@ -194,10 +194,12 @@ internal sealed class SheetWriter : IDisposable
         _writer.Flush();
     }
 
-    private void WriteCell(int col, int row, string value, DataType dataType, int styleIndex = -1)
+    private void WriteCell(int col, int row, string? value, DataType dataType, int styleIndex = -1)
     {
+        value ??= string.Empty;
+
         // track max length for auto-width
-        if (ShouldTrackWidth && value != null)
+        if (ShouldTrackWidth)
         {
             var len = value.Length;
             if (!_colMaxLen!.TryGetValue(col, out var cur) || len > cur)
@@ -241,7 +243,7 @@ internal sealed class SheetWriter : IDisposable
                 w.Write(styleAttr);
                 w.Write("><v>");
                 // قبول می‌کنیم: "1"/"0"/"true"/"false"
-                w.Write(value == "1" || value.Equals("true", StringComparison.OrdinalIgnoreCase) ? '1' : '0');
+                w.Write(value == "1" || string.Equals(value, "true", StringComparison.OrdinalIgnoreCase) ? '1' : '0');
                 w.Write("</v></c>");
                 break;
 
