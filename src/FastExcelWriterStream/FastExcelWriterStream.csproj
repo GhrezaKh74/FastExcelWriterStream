@@ -8,7 +8,7 @@
 
     <!-- ═══ NuGet Package Metadata ═══ -->
     <PackageId>FastExcelWriterStream</PackageId>
-    <Version>2.2.0</Version>
+    <Version>2.2.1</Version>
     <Authors>GholamReza Khalaji</Authors>
     <Company>Bsi</Company>
     <Copyright>Copyright © 2026 GholamReza Khalaji</Copyright>
@@ -28,12 +28,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-      v2.2.0 — New high-level API and data types.
-      - WriteDate / WriteBool for date and boolean cells
-      - WriteRow(...) with automatic type detection
-      - WriteRecords&lt;T&gt; object export with [ExcelColumn] / [ExcelIgnore]
-      - Raised column (16384) and sheet (1000) limits
-      - Updated SharpCompress to 0.49.1 (security fix)
+      v2.2.1 — Maintenance release.
+      - Warning-free build (nullable fixes, CS1591 silenced)
+      - CI actions updated to Node 24 (checkout/setup-dotnet v5)
+      - Includes all v2.2.0 features and fixes
     </PackageReleaseNotes>
 
     <!-- ═══ Build Settings ═══ -->
