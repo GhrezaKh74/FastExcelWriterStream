@@ -5,12 +5,33 @@ namespace FastExcelWriterStream;
 
 internal static class XmlHelper
 {
-    internal static string EscapeXml(string s) =>
-        s.Replace("&", "&amp;")
-         .Replace("<", "&lt;")
-         .Replace(">", "&gt;")
-         .Replace("\"", "&quot;")
-         .Replace("'", "&apos;");
+    /// <summary>کاراکترهایی که توی XML 1.0 غیرمجازن (C0 control به‌جز tab/LF/CR).</summary>
+    internal static bool IsIllegalXmlChar(char c)
+        => c < 0x20 && c != '\t' && c != '\n' && c != '\r';
+
+    /// <summary>
+    /// escape کردن کاراکترهای خاص XML و حذف کاراکترهای کنترلی غیرمجاز.
+    /// کاراکترهای کنترلی غیرمجاز (مثل 0x01) اگه پاک نشن، اکسل فایل رو باز نمی‌کنه.
+    /// </summary>
+    internal static string EscapeXml(string s)
+    {
+        var sb = new StringBuilder(s.Length + 16);
+        foreach (var c in s)
+        {
+            switch (c)
+            {
+                case '&':  sb.Append("&amp;");  break;
+                case '<':  sb.Append("&lt;");   break;
+                case '>':  sb.Append("&gt;");   break;
+                case '"':  sb.Append("&quot;"); break;
+                case '\'': sb.Append("&apos;"); break;
+                default:
+                    if (!IsIllegalXmlChar(c)) sb.Append(c);  // کاراکتر غیرمجاز رو دور بنداز
+                    break;
+            }
+        }
+        return sb.ToString();
+    }
 
     internal static string ColName(int col)
     {

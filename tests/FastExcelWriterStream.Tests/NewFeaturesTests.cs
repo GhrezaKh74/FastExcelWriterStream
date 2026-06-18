@@ -124,6 +124,31 @@ public class NewFeaturesTests
     }
 
     [Fact]
+    public void Write_StripsIllegalControlChars_ProducesValidXml()
+    {
+        var path = TempFile();
+        // متن لاگ با کاراکتر کنترلی غیرمجاز 0x01 (که اکسل رو می‌شکنه)
+        var dirty = "\u0001{\"Title\":\"log\"}\u0001";
+        using (var ew = new ExcelWriter(path))
+        {
+            ew.Write(dirty, 1, 1);
+            ew.WriteRow(dirty, "ok");
+        }
+
+        var xml = ReadEntry(path, "xl/worksheets/sheet1.xml");
+        Assert.DoesNotContain('\u0001', xml);   // کاراکتر غیرمجاز پاک شده
+        Assert.Contains("{&quot;Title&quot;:&quot;log&quot;}", xml);
+
+        // باید XML معتبر باشه (وگرنه اکسل باز نمی‌کنه)
+        var doc = new System.Xml.XmlDocument();
+        using (var zip = ZipFile.OpenRead(path))
+        using (var s = zip.GetEntry("xl/worksheets/sheet1.xml")!.Open())
+            doc.Load(s);   // اگه نامعتبر بود، اینجا throw می‌کنه
+
+        File.Delete(path);
+    }
+
+    [Fact]
     public void WriteRecords_EmptyType_Throws()
     {
         var path = TempFile();
