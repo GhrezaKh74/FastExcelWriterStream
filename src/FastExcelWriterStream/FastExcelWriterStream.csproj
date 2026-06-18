@@ -1,41 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
 
     <!-- ═══ NuGet Package Metadata ═══ -->
     <PackageId>FastExcelWriterStream</PackageId>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <Authors>GholamReza Khalaji</Authors>
     <Company>Bsi</Company>
-    <Copyright>Copyright © 2026 YourName</Copyright>
+    <Copyright>Copyright © 2026 GholamReza Khalaji</Copyright>
 
-    <Title>FastExcelWriterStream — Fast Streaming Excel Writer for .NET 8</Title>
+    <Title>FastExcelWriterStream — Fast Streaming Excel Writer for .NET 10</Title>
     <Description>
-      Lightweight, extremely fast and memory efficient Excel (.xlsx) writer for .NET 8.
+      Lightweight, extremely fast and memory efficient Excel (.xlsx) writer for .NET 10.
       Streams data directly to file with no memory footprint.
       Supports multiple sheets, auto sheet split, styles, freeze panes,
       RTL, auto column width, merge cells, formulas, and number formats.
     </Description>
 
     <PackageTags>excel;xlsx;fast;streaming;memory-efficient;dotnet;csharp;report;export</PackageTags>
-    <PackageProjectUrl>https://github.com/YourName/FastExcelWriterStream</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/YourName/FastExcelWriterStream</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/GhrezaKh74/FastExcelWriterStream</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GhrezaKh74/FastExcelWriterStream</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-      v1.0.0 — Initial release.
-      - Streaming xlsx writer
-      - Multiple sheets (up to 10)
-      - Auto sheet split for 1M+ rows
-      - Cell styles with number formatting
-      - Auto column width
-      - RTL support
-      - Freeze panes, AutoFilter, Merge cells
+      v2.1.0 — Upgraded target framework to .NET 10.
+      - Now targets net10.0 (latest LTS)
+      - Updated test tooling (Microsoft.NET.Test.Sdk, xUnit)
+      - CI pipeline updated to .NET 10 SDK
     </PackageReleaseNotes>
 
     <!-- ═══ Build Settings ═══ -->
