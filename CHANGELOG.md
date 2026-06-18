@@ -2,6 +2,14 @@
 
 All notable changes to FastExcelWriterStream will be documented in this file.
 
+## [2.2.1] - 2026-06-18
+
+### Changed
+- Warning-free build: fixed nullable warnings in `SheetWriter` and silenced
+  `CS1591` (missing XML doc comments)
+- CI workflow updated to `actions/checkout@v5` and `actions/setup-dotnet@v5`
+  (Node 24, resolves the Node 20 deprecation warning)
+
 ## [2.2.0] - 2026-06-18
 
 ### Added
