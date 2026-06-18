@@ -63,6 +63,41 @@ ew.WriteNumber(22954062, 2, 2);
 
 ## 📖 Usage
 
+### High-Level API (rows & objects)
+
+No manual row/column bookkeeping — types are detected automatically:
+
+```csharp
+using var ew = new ExcelWriter("report.xlsx");
+
+// Write whole rows; string/number/DateTime/bool are auto-detected, null = empty cell
+ew.WriteRow("Name", "Amount", "Joined");
+ew.WriteRow("Alice", 22954062, new DateTime(2024, 1, 15));
+ew.WriteRow("Bob",   18300000, true);
+```
+
+Export a collection of objects as a table:
+
+```csharp
+public class Invoice
+{
+    [ExcelColumn("Customer", Order = 1)]                          public string Name { get; set; } = "";
+    [ExcelColumn("Total", Order = 2, Format = NumberFormat.Thousands)] public decimal Total { get; set; }
+    [ExcelColumn("Date", Order = 3)]                              public DateTime Date { get; set; }
+    [ExcelIgnore]                                                 public string Internal { get; set; } = "";
+}
+
+using var ew = new ExcelWriter("invoices.xlsx");
+ew.WriteRecords(invoices);   // writes a bold header row + one row per item
+```
+
+### Dates & Booleans
+
+```csharp
+ew.WriteDate(DateTime.Now, 1, 1);   // stored as a serial number with a date format
+ew.WriteBool(true, 2, 1);           // native TRUE/FALSE cell
+```
+
 ### Basic Writing
 
 ```csharp

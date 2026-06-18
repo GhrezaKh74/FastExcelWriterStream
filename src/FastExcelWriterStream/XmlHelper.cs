@@ -76,16 +76,15 @@ internal static class XmlHelper
         sb.Append("<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">");
 
         // ── numFmts باید اول بیاد ──────────────────────────────────
-        var customFmts = styles.Where(s => s.NumberFormat != NumberFormat.None || s.DecimalPlaces > 0).ToList();
-        if (customFmts.Count > 0)
+        // فقط فرمت‌هایی که نیاز به تعریف دارن (Date/Time/DateTime جزو built-in اکسل‌ان و تعریف نمی‌خوان)
+        var customDecimals = styles.Where(s => s.DecimalPlaces > 0).Select(s => s.DecimalPlaces).Distinct().OrderBy(x => x).ToList();
+        var fmtCount = 0;
+        if (styles.Any(s => s.NumberFormat == NumberFormat.Thousands && s.DecimalPlaces == 0)) fmtCount++;
+        if (styles.Any(s => s.NumberFormat == NumberFormat.ThousandsDecimal && s.DecimalPlaces == 0)) fmtCount++;
+        if (styles.Any(s => s.NumberFormat == NumberFormat.Percent)) fmtCount++;
+        fmtCount += customDecimals.Count;
+        if (fmtCount > 0)
         {
-            var fmtCount = 0;
-            if (styles.Any(s => s.NumberFormat == NumberFormat.Thousands && s.DecimalPlaces == 0)) fmtCount++;
-            if (styles.Any(s => s.NumberFormat == NumberFormat.ThousandsDecimal && s.DecimalPlaces == 0)) fmtCount++;
-            if (styles.Any(s => s.NumberFormat == NumberFormat.Percent)) fmtCount++;
-            var customDecimals = styles.Where(s => s.DecimalPlaces > 0).Select(s => s.DecimalPlaces).Distinct().OrderBy(x => x).ToList();
-            fmtCount += customDecimals.Count;
-
             sb.Append($"<numFmts count=\"{fmtCount}\">");
             if (styles.Any(s => s.NumberFormat == NumberFormat.Thousands && s.DecimalPlaces == 0))
                 sb.Append("<numFmt numFmtId=\"164\" formatCode=\"#,##0\"/>");
