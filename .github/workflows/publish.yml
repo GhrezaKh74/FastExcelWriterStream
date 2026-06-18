@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*'   # trigger on tags like v1.0.0
+  workflow_dispatch:  # allow manual run from the Actions tab
 
 jobs:
   publish:
