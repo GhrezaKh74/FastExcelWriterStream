@@ -19,6 +19,9 @@ All notable changes to FastExcelWriterStream will be documented in this file.
 - Updated `SharpCompress` 0.47.3 → 0.49.1 (resolves GHSA-6c8g-7p36-r338)
 
 ### Fixed
+- **Illegal XML control characters** (e.g. `0x01`) in cell text are now stripped
+  instead of being written verbatim — previously such characters (common in raw
+  log data) produced a corrupt `.xlsx` that Excel refused to open
 - Styles builder no longer emits an empty `<numFmts>` block when only
   built-in formats (date/time) are used
 

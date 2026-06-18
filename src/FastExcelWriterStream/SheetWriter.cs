@@ -288,7 +288,7 @@ internal sealed class SheetWriter : IDisposable
     private static bool NeedsEscape(string s)
     {
         foreach (var c in s)
-            if (c == '&' || c == '<' || c == '>' || c == '"' || c == '\'')
+            if (c == '&' || c == '<' || c == '>' || c == '"' || c == '\'' || XmlHelper.IsIllegalXmlChar(c))
                 return true;
         return false;
     }
