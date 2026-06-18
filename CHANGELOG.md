@@ -2,6 +2,13 @@
 
 All notable changes to FastExcelWriterStream will be documented in this file.
 
+## [2.1.0] - 2026-06-18
+
+### Changed
+- Upgraded target framework from .NET 8 to **.NET 10** (latest LTS)
+- Updated CI publish workflow to use the .NET 10 SDK
+- Updated test dependencies: `Microsoft.NET.Test.Sdk` 17.12.0, `xunit` 2.9.2, `xunit.runner.visualstudio` 2.8.2
+
 ## [1.0.0] - 2026-04-30
 
 ### Added

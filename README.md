@@ -3,9 +3,9 @@
 [![NuGet](https://img.shields.io/nuget/v/FastExcelWriterStream.svg)](https://www.nuget.org/packages/FastExcelWriterStream)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/FastExcelWriterStream.svg)](https://www.nuget.org/packages/FastExcelWriterStream)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com)
+[![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com)
 
-Lightweight, extremely fast and memory efficient Excel (`.xlsx`) writer for .NET 8.  
+Lightweight, extremely fast and memory efficient Excel (`.xlsx`) writer for .NET 10.  
 Streams data **directly to file** — no XML serialization, no memory footprint.
 
 ---
