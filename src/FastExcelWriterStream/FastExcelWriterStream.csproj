@@ -11,7 +11,7 @@
 
     <!-- ═══ NuGet Package Metadata ═══ -->
     <PackageId>FastExcelWriterStream</PackageId>
-    <Version>2.3.0</Version>
+    <Version>2.3.1</Version>
     <Authors>GholamReza Khalaji</Authors>
     <Company>Bsi</Company>
     <Copyright>Copyright © 2026 GholamReza Khalaji</Copyright>
@@ -32,9 +32,12 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-      v2.3.0 — Multi-targeting.
+      v2.3.1 — Multi-targeting + worksheet order fix.
       - Now targets netstandard2.1 (.NET Core 3.1, .NET 5+) and net10.0
       - DateOnly/TimeOnly support is compiled only on .NET 6+ targets
+      - Fixed invalid OOXML element order (sheetViews now precedes cols) that
+        caused Excel to prompt for recovery when using ColumnsWidth with
+        freeze panes / RTL
       - No public API changes; net10.0 build is unchanged
     </PackageReleaseNotes>
 
