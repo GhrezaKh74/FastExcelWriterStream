@@ -161,7 +161,7 @@ public sealed class ExcelWriter : IDisposable
 
     public int AddSheet(SheetConfig sheet)
     {
-        ArgumentNullException.ThrowIfNull(sheet);
+        if (sheet is null) throw new ArgumentNullException(nameof(sheet));
         if (_sheets.Count >= MaxSheets)
             throw new InvalidOperationException($"ماکسیمم تعداد شیت ({MaxSheets}) پر شده است.");
 
@@ -270,7 +270,7 @@ public sealed class ExcelWriter : IDisposable
     /// </summary>
     public int AddStyle(StyleConfig style)
     {
-        ArgumentNullException.ThrowIfNull(style);
+        if (style is null) throw new ArgumentNullException(nameof(style));
         _styles.Add(style);
         return _styles.Count; // 1-based (0 = no style)
     }
@@ -420,7 +420,7 @@ public sealed class ExcelWriter : IDisposable
     /// <summary>نسخه‌ی IEnumerable از WriteRow.</summary>
     public int WriteRowValues(IEnumerable<object?> values)
     {
-        ArgumentNullException.ThrowIfNull(values);
+        if (values is null) throw new ArgumentNullException(nameof(values));
         int row = _hlRow;
         int col = 1;
         foreach (var v in values)
@@ -437,7 +437,7 @@ public sealed class ExcelWriter : IDisposable
     /// </summary>
     public int WriteRecords<T>(IEnumerable<T> records, bool writeHeader = true, int headerStyleIndex = -1)
     {
-        ArgumentNullException.ThrowIfNull(records);
+        if (records is null) throw new ArgumentNullException(nameof(records));
 
         var cols = typeof(T)
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
@@ -506,6 +506,7 @@ public sealed class ExcelWriter : IDisposable
                 WriteDate(dt, col, row, styleIndex >= 0 ? styleIndex : EnsureBuiltinStyle(fmt));
                 return;
             }
+#if NET6_0_OR_GREATER
             case DateOnly d:
                 WriteDate(d.ToDateTime(TimeOnly.MinValue), col, row,
                     styleIndex >= 0 ? styleIndex : EnsureBuiltinStyle(NumberFormat.Date));
@@ -514,6 +515,7 @@ public sealed class ExcelWriter : IDisposable
                 WriteNumber(t.ToTimeSpan().TotalDays, col, row,
                     styleIndex: styleIndex >= 0 ? styleIndex : EnsureBuiltinStyle(NumberFormat.Time));
                 return;
+#endif
         }
 
         if (IsNumeric(value))
