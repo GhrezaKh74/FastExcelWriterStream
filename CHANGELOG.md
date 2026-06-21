@@ -9,6 +9,13 @@ All notable changes to FastExcelWriterStream will be documented in this file.
   This makes it usable on **.NET Core 3.1**, .NET 5/6/7/8/9 and .NET 10
   (anything that implements .NET Standard 2.1).
 
+### Fixed
+- **Invalid worksheet element order** — when a sheet had both `ColumnsWidth`
+  *and* freeze panes / RTL, `<cols>` was written **before** `<sheetViews>`,
+  violating the OOXML element-order schema. Excel then showed a
+  "We found a problem with some content… recover?" prompt and dropped the
+  freeze/RTL settings. `<sheetViews>` is now emitted before `<cols>`.
+
 ### Changed
 - `DateOnly`/`TimeOnly` automatic type detection in `WriteRow`/`WriteRecords`
   is compiled only on .NET 6+ targets (these types do not exist on .NET Core 3.1).

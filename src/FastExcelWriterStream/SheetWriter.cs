@@ -346,16 +346,7 @@ internal sealed class SheetWriter : IDisposable
         _writer.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
         _writer.Write("<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">");
 
-        // اگه auto-width فعاله، cols بعد از نوشتن داده‌ها در WriteFooter نوشته میشه
-        if (!AutoWidthEnabled && _sheet.ColumnsWidth?.Count > 0)
-        {
-            _writer.Write("<cols>");
-            for (int i = 0; i < _sheet.ColumnsWidth.Count; i++)
-                _writer.Write(
-                    $"<col min=\"{i+1}\" max=\"{i+1}\" width=\"{_sheet.ColumnsWidth[i].ToString(CultureInfo.InvariantCulture)}\" customWidth=\"1\"/>");
-            _writer.Write("</cols>");
-        }
-
+        // ترتیب عناصر worksheet در OOXML اجباریه: sheetViews باید قبل از cols بیاد
         if (_sheet.FreezeRows > 0 || _sheet.FreezeCols > 0 || _sheet.RightToLeft)
         {
             var rtlAttr = _sheet.RightToLeft ? " rightToLeft=\"1\"" : "";
@@ -368,6 +359,16 @@ internal sealed class SheetWriter : IDisposable
                     $"topLeftCell=\"{topLeft}\" activePane=\"bottomRight\" state=\"frozen\"/>");
             }
             _writer.Write("</sheetView></sheetViews>");
+        }
+
+        // اگه auto-width فعاله، cols بعد از نوشتن داده‌ها در WriteFooter نوشته میشه
+        if (!AutoWidthEnabled && _sheet.ColumnsWidth?.Count > 0)
+        {
+            _writer.Write("<cols>");
+            for (int i = 0; i < _sheet.ColumnsWidth.Count; i++)
+                _writer.Write(
+                    $"<col min=\"{i+1}\" max=\"{i+1}\" width=\"{_sheet.ColumnsWidth[i].ToString(CultureInfo.InvariantCulture)}\" customWidth=\"1\"/>");
+            _writer.Write("</cols>");
         }
 
         if (_dataWriter != null)
