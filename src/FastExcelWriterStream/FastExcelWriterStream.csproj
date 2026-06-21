@@ -1,21 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <!-- Multi-targeting:
+           netstandard2.1 → .NET Core 3.1, .NET 5+, Mono, Xamarin, Unity
+           net10.0        → modern build (no extra SharpCompress dependencies) -->
+    <TargetFrameworks>netstandard2.1;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
 
     <!-- ═══ NuGet Package Metadata ═══ -->
     <PackageId>FastExcelWriterStream</PackageId>
-    <Version>2.2.1</Version>
+    <Version>2.3.0</Version>
     <Authors>GholamReza Khalaji</Authors>
     <Company>Bsi</Company>
     <Copyright>Copyright © 2026 GholamReza Khalaji</Copyright>
 
-    <Title>FastExcelWriterStream — Fast Streaming Excel Writer for .NET 10</Title>
+    <Title>FastExcelWriterStream — Fast Streaming Excel Writer for .NET</Title>
     <Description>
-      Lightweight, extremely fast and memory efficient Excel (.xlsx) writer for .NET 10.
+      Lightweight, extremely fast and memory efficient Excel (.xlsx) writer for .NET.
+      Multi-targets .NET Standard 2.1 (.NET Core 3.1, .NET 5+) and .NET 10.
       Streams data directly to file with no memory footprint.
       Supports multiple sheets, auto sheet split, styles, freeze panes,
       RTL, auto column width, merge cells, formulas, and number formats.
@@ -28,10 +32,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-      v2.2.1 — Maintenance release.
-      - Warning-free build (nullable fixes, CS1591 silenced)
-      - CI actions updated to Node 24 (checkout/setup-dotnet v5)
-      - Includes all v2.2.0 features and fixes
+      v2.3.0 — Multi-targeting.
+      - Now targets netstandard2.1 (.NET Core 3.1, .NET 5+) and net10.0
+      - DateOnly/TimeOnly support is compiled only on .NET 6+ targets
+      - No public API changes; net10.0 build is unchanged
     </PackageReleaseNotes>
 
     <!-- ═══ Build Settings ═══ -->

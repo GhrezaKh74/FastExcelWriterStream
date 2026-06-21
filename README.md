@@ -3,10 +3,13 @@
 [![NuGet](https://img.shields.io/nuget/v/FastExcelWriterStream.svg)](https://www.nuget.org/packages/FastExcelWriterStream)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/FastExcelWriterStream.svg)](https://www.nuget.org/packages/FastExcelWriterStream)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com)
+[![.NET](https://img.shields.io/badge/.NET-Standard%202.1%20%7C%2010.0-blue.svg)](https://dotnet.microsoft.com)
 
-Lightweight, extremely fast and memory efficient Excel (`.xlsx`) writer for .NET 10.  
+Lightweight, extremely fast and memory efficient Excel (`.xlsx`) writer for .NET.  
 Streams data **directly to file** — no XML serialization, no memory footprint.
+
+Multi-targets **.NET Standard 2.1** and **.NET 10**, so it runs on
+**.NET Core 3.1**, .NET 5/6/7/8/9 and .NET 10.
 
 ---
 
@@ -42,6 +45,20 @@ Streams data **directly to file** — no XML serialization, no memory footprint.
 ```bash
 dotnet add package FastExcelWriterStream
 ```
+
+### Supported frameworks
+
+The package ships two assemblies and NuGet picks the right one automatically:
+
+| Your project | Assembly used |
+|---|---|
+| .NET Core 3.1, .NET 5/6/7/8/9 | `lib/netstandard2.1` |
+| .NET 10 | `lib/net10.0` |
+
+> On the `netstandard2.1` build, `DateOnly`/`TimeOnly` automatic type detection
+> in `WriteRow`/`WriteRecords` is unavailable (those types are .NET 6+); such
+> values fall back to their `ToString()` representation. All other features are
+> identical.
 
 ---
 

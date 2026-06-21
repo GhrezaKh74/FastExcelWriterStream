@@ -2,6 +2,21 @@
 
 All notable changes to FastExcelWriterStream will be documented in this file.
 
+## [2.3.0] - 2026-06-21
+
+### Added
+- **Multi-targeting**: the library now builds for `netstandard2.1` **and** `net10.0`.
+  This makes it usable on **.NET Core 3.1**, .NET 5/6/7/8/9 and .NET 10
+  (anything that implements .NET Standard 2.1).
+
+### Changed
+- `DateOnly`/`TimeOnly` automatic type detection in `WriteRow`/`WriteRecords`
+  is compiled only on .NET 6+ targets (these types do not exist on .NET Core 3.1).
+  On the `netstandard2.1` build they fall through to the default `ToString()` path.
+- Replaced `ArgumentNullException.ThrowIfNull` (a .NET 6+ API) with explicit
+  null checks so the same code compiles on every target.
+- No public API changes; the `net10.0` build is functionally unchanged.
+
 ## [2.2.1] - 2026-06-18
 
 ### Changed
