@@ -2,7 +2,7 @@
 
 All notable changes to FastExcelWriterStream will be documented in this file.
 
-## [2.3.0] - 2026-06-21
+## [2.3.1] - 2026-06-21
 
 ### Added
 - **Multi-targeting**: the library now builds for `netstandard2.1` **and** `net10.0`.
