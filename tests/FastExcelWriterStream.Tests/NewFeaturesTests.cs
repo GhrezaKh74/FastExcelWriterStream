@@ -160,4 +160,42 @@ public class NewFeaturesTests
         }
         finally { if (File.Exists(path)) File.Delete(path); }
     }
+
+    // وقتی هم ColumnsWidth و هم freeze/RTL باشه، طبق اسکیمای OOXML
+    // باید sheetViews قبل از cols نوشته بشه؛ وگرنه اکسل فایل رو "تعمیر" می‌کنه.
+    [Fact]
+    public void Header_SheetViews_ComeBefore_Cols()
+    {
+        var path = TempFile();
+        using (var ew = new ExcelWriter(path, new SheetConfig
+        {
+            Name         = "Report",
+            RightToLeft  = true,
+            FreezeRows   = 1,
+            ColumnsWidth = new List<double> { 10, 20, 30 },
+        }))
+        {
+            ew.Write("A", 1, 1);
+            ew.Write("B", 2, 1);
+            ew.Write("C", 3, 1);
+        }
+
+        var xml = ReadEntry(path, "xl/worksheets/sheet1.xml");
+        int viewsIdx = xml.IndexOf("<sheetViews", StringComparison.Ordinal);
+        int colsIdx  = xml.IndexOf("<cols>", StringComparison.Ordinal);
+        int dataIdx  = xml.IndexOf("<sheetData>", StringComparison.Ordinal);
+
+        Assert.True(viewsIdx >= 0, "sheetViews missing");
+        Assert.True(colsIdx  >= 0, "cols missing");
+        Assert.True(viewsIdx < colsIdx, "sheetViews must come before cols");
+        Assert.True(colsIdx  < dataIdx, "cols must come before sheetData");
+
+        // و باید با System.Xml به‌عنوان XML معتبر لود بشه
+        var doc = new System.Xml.XmlDocument();
+        using (var zip = ZipFile.OpenRead(path))
+        using (var s = zip.GetEntry("xl/worksheets/sheet1.xml")!.Open())
+            doc.Load(s);
+
+        File.Delete(path);
+    }
 }
